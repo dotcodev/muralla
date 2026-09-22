@@ -174,18 +174,26 @@ Las otras imágenes de la carpeta `Brand` son bocetos de stock con marca de agua
 
 ## Publicar
 
-El resultado de `pnpm build` queda en `dist/` y es HTML estático, así que sirve cualquier
-hosting de sitios estáticos. La configuración es la misma en los tres candidatos:
+El sitio se despliega en **Vercel**. El resultado de `pnpm build` queda en `dist/` y es HTML
+estático.
 
-| Ajuste | Valor |
+La configuración ya está en [`vercel.json`](vercel.json), así que al importar el repo no hay
+que llenar nada a mano:
+
+| Ajuste | Dónde está definido |
 | --- | --- |
-| Build command | `pnpm build` |
-| Output / publish directory | `dist` |
-| Versión de Node | 22 (ya está en `.nvmrc`, los tres la respetan) |
-| Install command | se detecta solo por `pnpm-lock.yaml` |
+| Framework | `vercel.json` → `astro` |
+| Build command | `vercel.json` → `pnpm build` |
+| Output directory | `vercel.json` → `dist` |
+| Versión de Node | `package.json` → `engines.node: 22.x` |
+| Gestor de paquetes | se detecta solo por `pnpm-lock.yaml` |
 
-En **Cloudflare Pages** y **Netlify** se conecta el repo y se llenan esos campos. En
-**Vercel** el preset de Astro los pone solo.
+`vercel.json` también fija el cacheo: todo lo que Astro emite en `/_astro/` lleva un hash en
+el nombre, así que se puede cachear un año como inmutable — si el archivo cambia, cambia su
+URL. El favicon y la imagen de compartir van a una semana.
+
+**Ojo:** Vercel no lee `.nvmrc`; toma la versión de Node de `engines.node`. El `.nvmrc` se
+queda para quien use nvm en local.
 
 ### Un paso que no hay que olvidar
 
@@ -193,9 +201,9 @@ En **Cloudflare Pages** y **Netlify** se conecta el repo y se llenan esos campos
 que todavía no existe. De ahí salen el canonical, el sitemap y la URL de la imagen al
 compartir.
 
-Mientras el sitio viva en una URL temporal (`*.pages.dev`, `*.netlify.app`), esos tres
-apuntarán al dominio equivocado. No rompe nada visible, pero conviene:
+Mientras el sitio viva en la URL de Vercel (`*.vercel.app`), esos tres apuntarán al dominio
+equivocado. No rompe nada visible, pero conviene:
 
 - si el dominio propio se conecta de inmediato, dejarlo como está;
-- si va a tardar, poner la URL temporal en `site` (y en `public/robots.txt`) y cambiarla el
+- si va a tardar, poner la URL de Vercel en `site` (y en `public/robots.txt`) y cambiarla el
   día que se conecte el dominio.
