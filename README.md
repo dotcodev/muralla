@@ -198,6 +198,16 @@ que llenar nada a mano:
 | Output directory | `vercel.json` → `dist` |
 | Versión de Node | `package.json` → `engines.node: 22.x` |
 | Gestor de paquetes | se detecta solo por `pnpm-lock.yaml` |
+| Scripts de instalación | `pnpm-workspace.yaml` → `onlyBuiltDependencies` |
+
+Ese último merece una nota. Desde pnpm 10 los scripts de instalación de las dependencias
+están bloqueados por omisión, y en CI eso no es un aviso: el `pnpm install` falla con
+`ERR_PNPM_IGNORED_BUILDS`. `esbuild` —que entra por Astro/Vite— enlaza su binario en un
+`postinstall`, así que hay que autorizarlo explícitamente. `sharp` no aparece en la lista
+porque usa binarios precompilados y no necesita script.
+
+En pnpm 11 esa opción vive en `pnpm-workspace.yaml`, **no** en el campo `pnpm` de
+`package.json`: ahí se ignora en silencio (solo deja un `[WARN]` al instalar).
 
 `vercel.json` también fija el cacheo: todo lo que Astro emite en `/_astro/` lleva un hash en
 el nombre, así que se puede cachear un año como inmutable — si el archivo cambia, cambia su

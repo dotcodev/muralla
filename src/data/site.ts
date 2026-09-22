@@ -83,6 +83,7 @@ export const telUrl = `tel:${site.contacto.telefono.replace(/[^\d+]/g, '')}`;
 
 /** Rutas absolutas: asi el menu tambien funciona desde /gracias y /404. */
 export const nav = [
+  { href: '/', label: 'Inicio' },
   { href: '/#productos', label: 'Productos' },
   { href: '/#proceso', label: 'Proceso' },
   { href: '/#calidad', label: 'Calidad' },
