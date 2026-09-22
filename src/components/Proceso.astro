@@ -63,7 +63,7 @@ const pasos = [
                 src={p.imagen}
                 alt={p.alt}
                 widths={[320, 480, 720]}
-                sizes="(min-width: 1000px) 24vw, (min-width: 640px) 45vw, 88vw"
+                sizes="(min-width: 1000px) 24vw, 45vw"
                 loading="lazy"
                 quality={68}
               />
@@ -154,6 +154,27 @@ const pasos = [
     .head {
       grid-template-columns: 1fr;
       align-items: start;
+    }
+  }
+
+  /* En movil los cuatro pasos caben de dos en dos: el texto es corto y se
+     recorre la seccion completa sin tanto desplazamiento. */
+  @media (max-width: 640px) {
+    .pasos {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem 1rem;
+    }
+
+    .paso__media {
+      margin-bottom: 1rem;
+    }
+
+    .paso h3 {
+      font-size: var(--step-1);
+    }
+
+    .paso p {
+      font-size: 0.86rem;
     }
   }
 </style>

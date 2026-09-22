@@ -33,7 +33,7 @@ const year = new Date().getFullYear();
         </ul>
       </div>
 
-      <div class="col">
+      <div class="col col--taller">
         <p class="col-titulo">Taller</p>
         <address>
           <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
@@ -136,18 +136,18 @@ const year = new Date().getFullYear();
       grid-template-columns: repeat(2, 1fr);
     }
 
-    .col--brand {
+    /* La marca y el taller ocupan la fila entera: uno por el texto largo, el
+       otro para que la direccion no se parta a media palabra. */
+    .col--brand,
+    .col--taller {
       grid-column: span 2;
     }
   }
 
+  /* Las listas del pie son cortas: dos columnas se sostienen hasta muy angosto. */
   @media (max-width: 520px) {
     .grid {
-      grid-template-columns: 1fr;
-    }
-
-    .col--brand {
-      grid-column: span 1;
+      gap: 1.75rem 1.25rem;
     }
   }
 </style>

@@ -83,8 +83,8 @@ const pilares = [
   }
 
   .media {
-    position: relative;
-    /* Se queda fija mientras la columna de texto se desplaza. */
+    /* Se queda fija mientras la columna de texto se desplaza. Ademas es el
+       ancla de .media__inset, que va posicionada en absoluto. */
     position: sticky;
     top: 7rem;
   }
@@ -170,15 +170,24 @@ const pilares = [
     }
 
     .media {
-      position: static;
+      /* Relative, no static: quita el comportamiento fijo pero sigue siendo el
+         ancla de .media__inset. Con static la vineta se posicionaba contra el
+         documento y aparecia encimada sobre el hero. */
+      position: relative;
+      /* Hay que reiniciar el top del modo fijo: en relative dejaria de ser un
+         desplazamiento de anclaje y correria la foto sobre el texto. */
+      top: auto;
       max-width: 34rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
     }
 
+    /* En una sola columna la vineta ya no cuelga por fuera: se acomoda dentro
+       de la foto para no invadir el texto que sigue. */
     .media__inset {
-      right: 0;
-      bottom: -1.5rem;
-      width: 38%;
+      right: 0.9rem;
+      bottom: 0.9rem;
+      width: 34%;
+      border-width: 4px;
     }
   }
 </style>
