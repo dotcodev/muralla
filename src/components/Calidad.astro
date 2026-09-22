@@ -1,0 +1,184 @@
+---
+import { Image } from 'astro:assets';
+import trama from '../assets/fotos/muro-trama.jpg';
+import detalle from '../assets/fotos/detalle-textura.jpg';
+
+const pilares = [
+  {
+    titulo: 'Barro que conocemos',
+    texto:
+      'Un solo banco, revisado en cada extraccion. Saber de donde sale el barro es lo que permite repetir el mismo resultado lote tras lote.',
+  },
+  {
+    titulo: 'Medida pareja',
+    texto:
+      'Molde controlado y piezas seleccionadas antes de cargar. Menos juego en la medida es menos mortero, menos desperdicio y muro mas limpio.',
+  },
+  {
+    titulo: 'Secado sin prisa',
+    texto:
+      'Las hiladas quedan abiertas para que el aire corra. Secar rapido es lo que raja el ladrillo: aqui se le da el tiempo que pide.',
+  },
+  {
+    titulo: 'Cocción vigilada',
+    texto:
+      'El horno se atiende hasta que el color y el sonido dan el punto. La pieza que sale baja de temple se queda fuera del pedido.',
+  },
+];
+---
+
+<section class="section section--alt" id="calidad">
+  <div class="wrap grid">
+    <div class="media">
+      <div class="media__main">
+        <Image
+          src={trama}
+          alt="Muro de ladrillo acomodado en trama abierta para que circule el aire"
+          widths={[500, 750, 1100]}
+          sizes="(min-width: 980px) 46vw, 92vw"
+          loading="lazy"
+          quality={70}
+        />
+      </div>
+      <div class="media__inset">
+        <Image
+          src={detalle}
+          alt="Detalle del canto y la textura de las piezas apiladas en el patio"
+          widths={[280, 420, 600]}
+          sizes="(min-width: 980px) 20vw, 45vw"
+          loading="lazy"
+          quality={70}
+        />
+      </div>
+    </div>
+
+    <div class="texto">
+      <p class="eyebrow">03 — Calidad</p>
+      <h2>Cuatro cosas que no negociamos</h2>
+      <p class="lead">
+        El ladrillo se juzga en la obra, no en el catalogo. Por eso cuidamos los cuatro puntos
+        donde de verdad se gana o se pierde una pieza.
+      </p>
+
+      <ul class="pilares">
+        {
+          pilares.map((p) => (
+            <li>
+              <h3>{p.titulo}</h3>
+              <p>{p.texto}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(2.5rem, 6vw, 5.5rem);
+  }
+
+  .media {
+    position: relative;
+    /* Se queda fija mientras la columna de texto se desplaza. */
+    position: sticky;
+    top: 7rem;
+  }
+
+  .media__main {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--sand-200);
+  }
+
+  .media__main :global(img),
+  .media__inset :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .media__inset {
+    position: absolute;
+    right: -1.5rem;
+    bottom: -2rem;
+    width: 44%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 6px solid var(--bg-alt);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .texto h2 {
+    font-size: var(--step-4);
+  }
+
+  .texto .lead {
+    margin-top: 1.25rem;
+  }
+
+  .pilares {
+    display: grid;
+    gap: 0;
+    margin: clamp(2rem, 4vw, 3rem) 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: pilar;
+  }
+
+  .pilares li {
+    position: relative;
+    padding: 1.5rem 0 1.5rem 3.5rem;
+    border-top: 1px solid var(--border);
+    counter-increment: pilar;
+  }
+
+  .pilares li:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pilares li::before {
+    content: counter(pilar, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 1.55rem;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gold-600);
+  }
+
+  .pilares h3 {
+    margin-bottom: 0.4rem;
+    font-size: var(--step-1);
+  }
+
+  .pilares p {
+    font-size: 0.94rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 980px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .media {
+      position: static;
+      max-width: 34rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .media__inset {
+      right: 0;
+      bottom: -1.5rem;
+      width: 38%;
+    }
+  }
+</style>

@@ -1,0 +1,320 @@
+---
+import BotonWhatsApp from './BotonWhatsApp.astro';
+import Redes from './Redes.astro';
+import { direccionCompleta, mapsUrl, site, telUrl, whatsappUrl } from '../data/site';
+
+const tieneEndpoint = site.formEndpoint.length > 0;
+
+const datos = [
+  {
+    etiqueta: 'WhatsApp',
+    valor: site.contacto.whatsappVisible,
+    href: whatsappUrl('Hola Muralla, quiero cotizar.'),
+  },
+  { etiqueta: 'Telefono', valor: site.contacto.telefono, href: telUrl },
+  { etiqueta: 'Correo', valor: site.contacto.email, href: `mailto:${site.contacto.email}` },
+  { etiqueta: 'Taller', valor: direccionCompleta, href: mapsUrl },
+  { etiqueta: 'Horario', valor: site.contacto.horario, href: '' },
+];
+---
+
+<section class="section section--dark" id="contacto">
+  <div class="wrap grid">
+    <div class="intro">
+      <p class="eyebrow">05 — Contacto</p>
+      <h2>Dinos que vas a construir</h2>
+      <p class="lead">
+        Mandanos el metraje o la cantidad de piezas y te regresamos precio, tiempo de entrega y
+        ficha tecnica. Si lo tuyo corre, escribenos por WhatsApp: ahi contestamos mas rapido.
+      </p>
+
+      <div class="acciones">
+        <BotonWhatsApp />
+        <Redes tono="claro" />
+      </div>
+
+      <dl class="datos">
+        {
+          datos.map((d) => (
+            <div class="dato">
+              <dt>{d.etiqueta}</dt>
+              <dd>{d.href ? <a href={d.href} rel="noopener">{d.valor}</a> : d.valor}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <form
+      class="form"
+      data-form
+      method="post"
+      action={tieneEndpoint ? site.formEndpoint : undefined}
+    >
+      <div class="campo">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" name="nombre" type="text" autocomplete="name" required />
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label for="telefono">Telefono o WhatsApp</label>
+          <input id="telefono" name="telefono" type="tel" autocomplete="tel" required />
+        </div>
+        <div class="campo">
+          <label for="email">Correo <span class="opt">(opcional)</span></label>
+          <input id="email" name="email" type="email" autocomplete="email" />
+        </div>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label for="producto">Producto</label>
+          <select id="producto" name="producto">
+            <option>Ladrillo rojo recocido</option>
+            <option>Ladrillo de barro artesanal</option>
+            <option>Artesania en barro</option>
+            <option>Pieza a medida</option>
+            <option>Todavia no lo se</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="cantidad">Cantidad aproximada</label>
+          <input id="cantidad" name="cantidad" type="text" placeholder="Ej. 5000 piezas o 120 m2" />
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="mensaje">Cuentanos del proyecto</label>
+        <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+      </div>
+
+      {/* Trampa para bots: un campo que una persona nunca ve ni llena. */}
+      <div class="trampa" aria-hidden="true">
+        <label for="empresa">No llenar</label>
+        <input id="empresa" name="empresa" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <button class="btn btn--gold enviar" type="submit">Enviar solicitud</button>
+
+      <p class="aviso">
+        {
+          tieneEndpoint
+            ? 'Te respondemos el mismo dia habil.'
+            : 'Al enviar se abre tu app de correo con los datos listos.'
+        }
+      </p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .intro h2 {
+    font-size: var(--step-4);
+  }
+
+  .intro .lead {
+    margin-top: 1.25rem;
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .datos {
+    margin: clamp(2.25rem, 4vw, 3rem) 0 0;
+  }
+
+  .dato {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding: 0.95rem 0;
+    border-top: 1px solid rgba(245, 239, 229, 0.14);
+  }
+
+  .dato:last-child {
+    border-bottom: 1px solid rgba(245, 239, 229, 0.14);
+  }
+
+  .dato dt {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-400);
+    padding-top: 0.2rem;
+  }
+
+  .dato dd {
+    margin: 0;
+    font-size: 0.95rem;
+    color: rgba(245, 239, 229, 0.85);
+  }
+
+  .dato a {
+    text-decoration: none;
+    border-bottom: 1px solid rgba(245, 239, 229, 0.25);
+    transition: border-color 0.2s var(--ease);
+  }
+
+  .dato a:hover {
+    border-color: var(--gold-400);
+  }
+
+  /* --- Formulario --- */
+  .form {
+    display: grid;
+    gap: 1.1rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    background: var(--clay-800);
+    border: 1px solid rgba(245, 239, 229, 0.1);
+    border-radius: var(--radius-lg);
+  }
+
+  .fila {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+    gap: 1.1rem;
+  }
+
+  .campo {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .campo label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245, 239, 229, 0.7);
+  }
+
+  .opt {
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: rgba(245, 239, 229, 0.4);
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 0.8rem 0.9rem;
+    background: rgba(14, 11, 9, 0.5);
+    border: 1px solid rgba(245, 239, 229, 0.16);
+    border-radius: var(--radius);
+    color: var(--sand-50);
+    font-size: 0.95rem;
+    transition:
+      border-color 0.2s var(--ease),
+      background-color 0.2s var(--ease);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: rgba(245, 239, 229, 0.32);
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--gold-500);
+    background: rgba(14, 11, 9, 0.75);
+  }
+
+  select {
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, rgba(245, 239, 229, 0.6) 50%),
+      linear-gradient(135deg, rgba(245, 239, 229, 0.6) 50%, transparent 50%);
+    background-position:
+      calc(100% - 1.15rem) 1.25rem,
+      calc(100% - 0.8rem) 1.25rem;
+    background-size:
+      6px 6px,
+      6px 6px;
+    background-repeat: no-repeat;
+  }
+
+  select option {
+    background: var(--clay-800);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 6rem;
+  }
+
+  .trampa {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .enviar {
+    margin-top: 0.4rem;
+    justify-self: start;
+  }
+
+  .aviso {
+    font-size: 0.82rem;
+    color: rgba(245, 239, 229, 0.45);
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 460px) {
+    .dato {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+</style>
+
+<script define:vars={{ tieneEndpoint, correo: site.contacto.email }}>
+  const form = document.querySelector('[data-form]');
+
+  if (form && !tieneEndpoint) {
+    // Sin servicio de formularios configurado, la solicitud se arma como correo.
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const d = new FormData(form);
+      if (d.get('empresa')) return; // bot
+
+      const cuerpo = [
+        `Nombre: ${d.get('nombre')}`,
+        `Telefono: ${d.get('telefono')}`,
+        `Correo: ${d.get('email') || '-'}`,
+        `Producto: ${d.get('producto')}`,
+        `Cantidad: ${d.get('cantidad') || '-'}`,
+        '',
+        d.get('mensaje'),
+      ].join('\n');
+
+      window.location.href =
+        `mailto:${correo}` +
+        `?subject=${encodeURIComponent('Solicitud de cotizacion — ' + d.get('nombre'))}` +
+        `&body=${encodeURIComponent(cuerpo)}`;
+    });
+  }
+</script>

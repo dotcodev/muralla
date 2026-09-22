@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, whatsappUrl } from '../data/site';
+---
+
+<Base title={`Solicitud recibida — ${site.nombreCompleto}`} path="/gracias" noindex>
+  <section class="section gracias">
+    <div class="wrap wrap--narrow">
+      <p class="eyebrow">Solicitud recibida</p>
+      <h1>Gracias. Ya nos llego tu mensaje.</h1>
+      <p class="lead">
+        Un asesor de {site.nombreCompleto} te contacta el mismo dia habil con precio, tiempo de
+        entrega y ficha tecnica. Si lo tuyo corre, escribenos directo por WhatsApp.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--gold" href={whatsappUrl('Hola Muralla, acabo de enviar una solicitud por el sitio.')}>
+          Escribir por WhatsApp
+        </a>
+        <a class="btn btn--ghost" href="/">Volver al inicio</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .gracias {
+    display: grid;
+    align-items: center;
+    min-height: 68svh;
+  }
+
+  .gracias h1 {
+    font-size: var(--step-4);
+  }
+
+  .gracias .lead {
+    margin-top: 1.25rem;
+  }
+
+  .btn-row {
+    margin-top: 2rem;
+  }
+</style>

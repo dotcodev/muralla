@@ -1,0 +1,153 @@
+---
+import { Image } from 'astro:assets';
+import Redes from './Redes.astro';
+import logo from '../assets/marca/muralla-logo.png';
+import { mapsUrl, nav, site, telUrl } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="brick-rule" aria-hidden="true"></div>
+
+    <div class="grid">
+      <div class="col col--brand">
+        <Image src={logo} alt={site.nombreCompleto} widths={[160, 320]} sizes="160px" loading="lazy" />
+        <p>{site.descripcion}</p>
+        <Redes tono="claro" class="footer-redes" />
+      </div>
+
+      <nav class="col" aria-label="Navegacion del pie">
+        <p class="col-titulo">Sitio</p>
+        <ul>
+          {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <div class="col">
+        <p class="col-titulo">Contacto</p>
+        <ul>
+          <li><a href={telUrl}>{site.contacto.telefono}</a></li>
+          <li><a href={`mailto:${site.contacto.email}`}>{site.contacto.email}</a></li>
+        </ul>
+      </div>
+
+      <div class="col">
+        <p class="col-titulo">Taller</p>
+        <address>
+          <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
+            {site.contacto.calle}<br />
+            {site.contacto.cp} {site.contacto.ciudad}, {site.contacto.estado}
+          </a><br />
+          <span class="mute">{site.contacto.horario}</span>
+        </address>
+      </div>
+    </div>
+
+    <div class="legal">
+      <p>&copy; {year} {site.nombreCompleto}. Todos los derechos reservados.</p>
+      <p class="mute">Hecho en barro, agua, sol y fuego.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--clay-950);
+    color: rgba(245, 239, 229, 0.7);
+    font-size: var(--step--1);
+  }
+
+  .brick-rule {
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  /* Columnas explicitas: auto-fit dejaba caer "Taller" a una segunda fila. */
+  .grid {
+    display: grid;
+    grid-template-columns: 1.7fr 1fr 1.1fr 1.2fr;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .col--brand {
+    max-width: 34ch;
+  }
+
+  .col--brand :global(img) {
+    width: 140px;
+    height: auto;
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-redes {
+    margin-top: 1.5rem;
+  }
+
+  .col-titulo {
+    margin-bottom: 1.1rem;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-400);
+  }
+
+  .col ul {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .col a {
+    text-decoration: none;
+    transition: color 0.2s var(--ease);
+  }
+
+  .col a:hover {
+    color: var(--gold-400);
+  }
+
+  address {
+    font-style: normal;
+    line-height: 1.8;
+  }
+
+  .mute {
+    color: rgba(245, 239, 229, 0.45);
+  }
+
+  .legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block: 1.75rem;
+    border-top: 1px solid rgba(245, 239, 229, 0.12);
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .col--brand {
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .col--brand {
+      grid-column: span 1;
+    }
+  }
+</style>

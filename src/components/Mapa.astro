@@ -1,0 +1,133 @@
+---
+import { direccionCompleta, mapsUrl, site } from '../data/site';
+
+const { lat, lng } = site.contacto.coordenadas;
+
+// Embed sin llave de API. Se carga en diferido: al estar al final de la pagina,
+// no pesa nada hasta que el visitante se acerca a el.
+const embedSrc = `https://maps.google.com/maps?q=${lat},${lng}&z=15&hl=es&output=embed`;
+---
+
+<section class="mapa" aria-labelledby="mapa-titulo">
+  <div class="mapa__marco">
+    <iframe
+      src={embedSrc}
+      title={`Ubicacion de ${site.nombreCompleto} en el mapa`}
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      allowfullscreen></iframe>
+  </div>
+
+  <div class="wrap mapa__capa">
+    <div class="tarjeta">
+      <p class="eyebrow">Donde estamos</p>
+      <h2 id="mapa-titulo">El taller</h2>
+
+      <address>
+        {site.contacto.calle}<br />
+        {site.contacto.cp} {site.contacto.ciudad}, {site.contacto.estado}
+      </address>
+
+      <p class="horario">{site.contacto.horario}</p>
+
+      <a class="btn btn--gold" href={mapsUrl} target="_blank" rel="noopener noreferrer">
+        Como llegar
+      </a>
+
+      <p class="coords">
+        <span class="visually-hidden">Coordenadas: </span>
+        {lat}, {lng}
+      </p>
+    </div>
+  </div>
+
+  <p class="visually-hidden">Direccion del taller: {direccionCompleta}</p>
+</section>
+
+<style>
+  .mapa {
+    position: relative;
+    background: var(--sand-200);
+  }
+
+  .mapa__marco {
+    height: clamp(22rem, 46vh, 32rem);
+  }
+
+  .mapa__marco iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    /* Acerca el mapa a la paleta calida del sitio sin volverlo ilegible. */
+    filter: saturate(0.78) contrast(1.02);
+  }
+
+  /* La tarjeta flota sobre el mapa en escritorio. */
+  .mapa__capa {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .tarjeta {
+    width: min(100%, 24rem);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    background: var(--clay-900);
+    color: var(--sand-100);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    pointer-events: auto;
+  }
+
+  .tarjeta .eyebrow {
+    color: var(--gold-400);
+  }
+
+  .tarjeta h2 {
+    margin-bottom: 1.1rem;
+    font-size: var(--step-3);
+    color: var(--sand-50);
+  }
+
+  address {
+    font-style: normal;
+    font-size: 1.02rem;
+    line-height: 1.6;
+  }
+
+  .horario {
+    margin-top: 0.5rem;
+    margin-bottom: 1.6rem;
+    font-size: 0.9rem;
+    color: rgba(245, 239, 229, 0.55);
+  }
+
+  .coords {
+    margin-top: 1.1rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: rgba(245, 239, 229, 0.4);
+  }
+
+  /* En movil la tarjeta se sale del mapa y se apila debajo. */
+  @media (max-width: 760px) {
+    .mapa__marco {
+      height: 16rem;
+    }
+
+    .mapa__capa {
+      position: static;
+      padding-block: 0;
+    }
+
+    .tarjeta {
+      width: 100%;
+      margin-top: -3rem;
+      position: relative;
+      z-index: 1;
+    }
+  }
+</style>

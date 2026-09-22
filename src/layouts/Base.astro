@@ -1,0 +1,138 @@
+---
+import { Font } from 'astro:assets';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BotonWhatsApp from '../components/BotonWhatsApp.astro';
+import { mapsUrl, site } from '../data/site';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Ruta relativa para la etiqueta canonical, p. ej. "/" o "/gracias". */
+  path?: string;
+  noindex?: boolean;
+  /** true cuando la pagina abre con el hero a sangre; el header va transparente. */
+  hero?: boolean;
+}
+
+const {
+  title = `Ladrillo de barro artesanal en Puebla | ${site.nombreCompleto}`,
+  description = site.descripcion,
+  path = '/',
+  noindex = false,
+  hero = false,
+} = Astro.props;
+
+const base = Astro.site ?? new URL(site.url);
+const canonical = new URL(path, base).href;
+
+// Imagen que se ve al compartir el enlace (WhatsApp, Facebook, X).
+const ogImage = new URL('/og.jpg', base).href;
+
+// Datos estructurados: ayuda a que la ficha del negocio salga bien en Google.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: site.nombreCompleto,
+  description: site.descripcion,
+  url: canonical,
+  telephone: site.contacto.telefono,
+  email: site.contacto.email,
+  image: ogImage,
+  hasMap: mapsUrl,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.contacto.calle,
+    addressLocality: site.contacto.ciudad,
+    addressRegion: site.contacto.estado,
+    postalCode: site.contacto.cp,
+    addressCountry: 'MX',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: site.contacto.coordenadas.lat,
+    longitude: site.contacto.coordenadas.lng,
+  },
+  sameAs: Object.values(site.redes).filter((url) => url.length > 0),
+  openingHours: 'Mo-Sa 08:00-18:00',
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Productos',
+    itemListElement: [
+      'Ladrillo rojo recocido',
+      'Ladrillo de barro artesanal',
+      'Artesania en barro',
+      'Piezas a medida',
+    ].map((nombre) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Product', name: nombre },
+    })),
+  },
+};
+---
+
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#1f1813" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.nombreCompleto} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`Logotipo de ${site.nombreCompleto} sobre las hiladas de ladrillo del taller`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+
+    <Font cssVariable="--font-display" preload />
+    <Font cssVariable="--font-body" preload />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+    <Header solido={!hero} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <BotonWhatsApp variante="flotante" />
+
+    <style>
+      .skip-link {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        z-index: 100;
+        padding: 0.7rem 1.2rem;
+        background: var(--clay-900);
+        color: var(--sand-50);
+        font-size: 0.9rem;
+        text-decoration: none;
+        border-radius: 0 0 var(--radius) var(--radius);
+        transform: translate(-50%, -110%);
+        transition: transform 0.2s var(--ease);
+      }
+
+      .skip-link:focus-visible {
+        transform: translate(-50%, 0);
+      }
+    </style>
+  </body>
+</html>

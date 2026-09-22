@@ -1,0 +1,284 @@
+---
+import { Image } from 'astro:assets';
+import pasillo from '../assets/fotos/pasillo-secado.jpg';
+import trama2 from '../assets/fotos/muro-trama-2.jpg';
+import conjunto from '../assets/fotos/artesania-conjunto.jpg';
+import amasado from '../assets/fotos/proceso-amasado.jpg';
+import torre from '../assets/fotos/barro-torre.jpg';
+import calabaza from '../assets/fotos/artesania-calabaza.jpg';
+import pila from '../assets/fotos/artesania-pila.jpg';
+import nichos from '../assets/fotos/barro-nichos.jpg';
+import carga from '../assets/fotos/proceso-carga.jpg';
+
+/**
+ * El orden importa: las tres piezas `ancho` van en las posiciones 0, 3 y 7 para que
+ * la retícula de 3 columnas cierre justo en 12 celdas, sin huecos al final.
+ * Solo se marcan como anchas fotos horizontales.
+ */
+const fotos = [
+  { src: pasillo, alt: 'Pasillo entre dos muros de ladrillo puestos a secar', ancho: true },
+  { src: trama2, alt: 'Trama abierta de ladrillo vista de frente' },
+  { src: conjunto, alt: 'Calaveras y calabazas de barro cocido apiladas' },
+  { src: amasado, alt: 'Trabajador amasando barro en el taller', ancho: true },
+  { src: calabaza, alt: 'Calabaza de barro cocido dentro de un nicho de ladrillo' },
+  { src: carga, alt: 'Trabajador vaciando material en la mezcladora' },
+  { src: pila, alt: 'Piezas de barro recien salidas del horno, listas para seleccionar' },
+  { src: torre, alt: 'Columna de ladrillos con piezas de barro entre las hiladas', ancho: true },
+  { src: nichos, alt: 'Calaveras de barro asomando entre los huecos de un muro de ladrillo' },
+];
+---
+
+<section class="section" id="galeria">
+  <div class="wrap">
+    <header class="head">
+      <div>
+        <p class="eyebrow">04 — Galeria</p>
+        <h2>El taller por dentro</h2>
+      </div>
+      <p class="lead">
+        Sin render ni foto de banco: esto es el patio, las hiladas, el barro y la gente que
+        levanta cada pedido.
+      </p>
+    </header>
+
+    <ul class="galeria" data-galeria>
+      {
+        fotos.map((f, i) => (
+          <li class:list={['celda', f.ancho && 'celda--ancha']}>
+            <button type="button" class="celda__btn" data-abrir={i} aria-label={`Ampliar: ${f.alt}`}>
+              <Image
+                src={f.src}
+                alt={f.alt}
+                widths={[400, 700, 1000, 1600]}
+                sizes="(min-width: 1000px) 33vw, (min-width: 640px) 50vw, 92vw"
+                loading="lazy"
+                quality={68}
+              />
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <dialog class="visor" data-visor aria-label="Visor de fotografias">
+    <button type="button" class="visor__cerrar" data-cerrar aria-label="Cerrar visor">&times;</button>
+    <button type="button" class="visor__nav visor__nav--prev" data-prev aria-label="Foto anterior">
+      &#8249;
+    </button>
+    <figure class="visor__fig">
+      <div class="visor__slot" data-slot></div>
+      <figcaption data-pie></figcaption>
+    </figure>
+    <button type="button" class="visor__nav visor__nav--next" data-next aria-label="Foto siguiente">
+      &#8250;
+    </button>
+  </dialog>
+</section>
+
+<style>
+  .head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .head h2 {
+    font-size: var(--step-4);
+  }
+
+  .galeria {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Red de seguridad: si una pieza ancha no cabe, otra rellena el hueco. */
+    grid-auto-flow: row dense;
+    gap: clamp(0.5rem, 1.2vw, 1rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .celda--ancha {
+    grid-column: span 2;
+  }
+
+  .celda__btn {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--sand-200);
+    overflow: hidden;
+  }
+
+  .celda--ancha .celda__btn {
+    aspect-ratio: 2 / 1;
+  }
+
+  .celda__btn :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      transform 0.6s var(--ease),
+      filter 0.4s var(--ease);
+  }
+
+  .celda__btn:hover :global(img) {
+    transform: scale(1.05);
+    filter: brightness(1.06);
+  }
+
+  /* --- Visor --- */
+  .visor {
+    width: min(94vw, 1200px);
+    max-width: none;
+    max-height: 94svh;
+    /* El reset global pone margin:0 y eso descentra el dialogo modal. */
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .visor::backdrop {
+    background: rgba(14, 11, 9, 0.93);
+    backdrop-filter: blur(3px);
+  }
+
+  .visor__fig {
+    margin: 0;
+  }
+
+  .visor__slot :global(img) {
+    width: 100%;
+    max-height: 82svh;
+    object-fit: contain;
+    border-radius: var(--radius);
+  }
+
+  .visor figcaption {
+    padding-top: 0.9rem;
+    color: rgba(251, 248, 243, 0.62);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .visor__cerrar,
+  .visor__nav {
+    position: fixed;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid rgba(251, 248, 243, 0.25);
+    border-radius: 50%;
+    background: rgba(14, 11, 9, 0.6);
+    color: var(--sand-50);
+    line-height: 1;
+    transition:
+      background-color 0.2s var(--ease),
+      border-color 0.2s var(--ease);
+  }
+
+  .visor__cerrar:hover,
+  .visor__nav:hover {
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+    color: var(--clay-950);
+  }
+
+  .visor__cerrar {
+    top: 1.25rem;
+    right: 1.25rem;
+    font-size: 1.6rem;
+  }
+
+  .visor__nav {
+    top: 50%;
+    margin-top: -1.5rem;
+    font-size: 2rem;
+  }
+
+  .visor__nav--prev {
+    left: 1.25rem;
+  }
+
+  .visor__nav--next {
+    right: 1.25rem;
+  }
+
+  @media (max-width: 720px) {
+    .galeria {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .head {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .visor__nav {
+      top: auto;
+      bottom: 1.25rem;
+      margin-top: 0;
+    }
+  }
+</style>
+
+<script>
+  const galeria = document.querySelector<HTMLElement>('[data-galeria]');
+  const visor = document.querySelector<HTMLDialogElement>('[data-visor]');
+  const slot = visor?.querySelector<HTMLElement>('[data-slot]');
+  const pie = visor?.querySelector<HTMLElement>('[data-pie]');
+
+  if (galeria && visor && slot && pie) {
+    const botones = [...galeria.querySelectorAll<HTMLButtonElement>('[data-abrir]')];
+    let actual = 0;
+
+    const mostrar = (i: number) => {
+      actual = (i + botones.length) % botones.length;
+      const original = botones[actual].querySelector('img');
+      if (!original) return;
+
+      // Reutiliza el srcset que ya trae la miniatura: al pedir un `sizes` mayor,
+      // el navegador elige la variante grande sin descargar nada duplicado.
+      const grande = original.cloneNode(true) as HTMLImageElement;
+      grande.sizes = '92vw';
+      grande.loading = 'eager';
+      grande.removeAttribute('style');
+
+      slot.replaceChildren(grande);
+      pie.textContent = original.alt;
+    };
+
+    galeria.addEventListener('click', (event) => {
+      const btn = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-abrir]');
+      if (!btn) return;
+      mostrar(botones.indexOf(btn));
+      visor.showModal();
+    });
+
+    visor.querySelector('[data-cerrar]')?.addEventListener('click', () => visor.close());
+    visor.querySelector('[data-prev]')?.addEventListener('click', () => mostrar(actual - 1));
+    visor.querySelector('[data-next]')?.addEventListener('click', () => mostrar(actual + 1));
+
+    // Clic en el fondo (fuera de la figura) tambien cierra.
+    visor.addEventListener('click', (event) => {
+      if (event.target === visor) visor.close();
+    });
+
+    visor.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight') mostrar(actual + 1);
+      if (event.key === 'ArrowLeft') mostrar(actual - 1);
+    });
+
+    // Devuelve el foco a la miniatura de la que se salio.
+    visor.addEventListener('close', () => botones[actual]?.focus());
+  }
+</script>

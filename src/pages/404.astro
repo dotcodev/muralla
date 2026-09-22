@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base title={`Pagina no encontrada — ${site.nombreCompleto}`} path="/404" noindex>
+  <section class="section error">
+    <div class="wrap wrap--narrow">
+      <p class="eyebrow">Error 404</p>
+      <h1>Esta pieza no esta en el patio</h1>
+      <p class="lead">
+        La direccion que buscas no existe o cambio de lugar. Regresa al inicio y sigue desde ahi.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--gold" href="/">Volver al inicio</a>
+        <a class="btn btn--ghost" href="/#contacto">Contactar</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .error {
+    display: grid;
+    align-items: center;
+    min-height: 68svh;
+  }
+
+  .error h1 {
+    font-size: var(--step-4);
+  }
+
+  .error .lead {
+    margin-top: 1.25rem;
+  }
+
+  .btn-row {
+    margin-top: 2rem;
+  }
+</style>

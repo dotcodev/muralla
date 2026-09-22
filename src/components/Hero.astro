@@ -1,0 +1,224 @@
+---
+import { Image } from 'astro:assets';
+import hero from '../assets/fotos/secado-panoramica.jpg';
+import { whatsappUrl } from '../data/site';
+
+const sellos = ['Barro seleccionado', 'Secado natural', 'Cocido pieza por pieza'];
+---
+
+<section class="hero">
+  <div class="hero__media">
+    <Image
+      src={hero}
+      alt="Hiladas de ladrillo de barro secando bajo la lona del taller de Muralla"
+      widths={[640, 960, 1280, 1800, 2400]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      quality={72}
+    />
+  </div>
+
+  <div class="wrap hero__inner">
+    <p class="hero__eyebrow">Ladrillera artesanal en Puebla</p>
+
+    <h1 class="hero__title">
+      Ladrillo de barro<br />
+      <em>que aguanta generaciones</em>
+    </h1>
+
+    <p class="hero__text">
+      Extraemos, amasamos, moldeamos y cocemos cada pieza en nuestro taller. Barro noble,
+      medida pareja y ese color que solo da el fuego: para obra, para fachada y para
+      proyectos que se ven de cerca.
+    </p>
+
+    <div class="btn-row">
+      <a class="btn btn--gold" href={whatsappUrl('Hola Muralla, me interesa cotizar ladrillo.')}>
+        Pedir cotizacion
+      </a>
+      <a class="btn btn--ghost-light" href="#productos">Ver productos</a>
+    </div>
+
+    <ul class="hero__sellos">
+      {sellos.map((s) => <li>{s}</li>)}
+    </ul>
+  </div>
+
+  <a class="hero__scroll" href="#productos" aria-label="Ir a productos">
+    <span></span>
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    /* Alto util real en movil (svh evita el salto de la barra del navegador). */
+    min-height: min(92svh, 900px);
+    padding-block: calc(var(--header-h) + clamp(2rem, 8vh, 4.5rem)) clamp(3.5rem, 9vh, 6rem);
+    /* Compensa el header translucido: sube justo su altura, ni mas ni menos. */
+    margin-top: calc(var(--header-h) * -1);
+    background: var(--clay-950);
+    color: var(--sand-50);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .hero__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 58%;
+  }
+
+  /* Dos capas: una vertical para el texto, otra cálida para unificar el color. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(23, 18, 15, 0.78) 0%,
+        rgba(23, 18, 15, 0.4) 38%,
+        rgba(23, 18, 15, 0.82) 88%
+      ),
+      linear-gradient(90deg, rgba(23, 18, 15, 0.7) 0%, rgba(23, 18, 15, 0.12) 65%);
+  }
+
+  .hero__inner {
+    position: relative;
+    max-width: calc(var(--wrap) + 0px);
+  }
+
+  .hero__eyebrow {
+    margin-bottom: 1.4rem;
+    padding-left: 3.25rem;
+    position: relative;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold-400);
+  }
+
+  .hero__eyebrow::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 2.25rem;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .hero__title {
+    max-width: 16ch;
+    font-size: var(--step-5);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+
+  .hero__title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold-300);
+  }
+
+  .hero__text {
+    max-width: 52ch;
+    margin-top: 1.6rem;
+    font-size: var(--step-1);
+    line-height: 1.55;
+    color: rgba(251, 248, 243, 0.82);
+  }
+
+  .btn-row {
+    margin-top: 2.4rem;
+  }
+
+  .hero__sellos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 2rem;
+    margin: 2.75rem 0 0;
+    padding: 1.5rem 0 0;
+    border-top: 1px solid rgba(251, 248, 243, 0.18);
+    list-style: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(251, 248, 243, 0.7);
+  }
+
+  .hero__sellos li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .hero__sellos li::before {
+    content: '';
+    width: 9px;
+    height: 9px;
+    background: var(--gold-500);
+  }
+
+  .hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 1.5rem;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 3rem;
+    margin-left: -1rem;
+  }
+
+  .hero__scroll span {
+    width: 1px;
+    height: 2.25rem;
+    background: linear-gradient(180deg, transparent, rgba(251, 248, 243, 0.65));
+    animation: drip 2.4s var(--ease) infinite;
+  }
+
+  @keyframes drip {
+    0%,
+    100% {
+      transform: scaleY(0.4);
+      transform-origin: top;
+      opacity: 0.3;
+    }
+    50% {
+      transform: scaleY(1);
+      transform-origin: top;
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hero {
+      align-items: center;
+      min-height: min(96svh, 760px);
+    }
+
+    .hero__scroll {
+      display: none;
+    }
+
+    .hero__sellos {
+      gap: 0.5rem 1.25rem;
+      font-size: 0.72rem;
+    }
+  }
+</style>

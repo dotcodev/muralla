@@ -1,0 +1,247 @@
+---
+import { Image } from 'astro:assets';
+import rojo from '../assets/fotos/ladrillo-rojo.jpg';
+import barro from '../assets/fotos/pasillo-secado.jpg';
+import artesania from '../assets/fotos/artesania-calaveras.jpg';
+import { whatsappUrl } from '../data/site';
+
+const productos = [
+  {
+    nombre: 'Ladrillo rojo recocido',
+    imagen: rojo,
+    alt: 'Ladrillos rojos recocidos apilados en el patio del taller',
+    resumen:
+      'La pieza de fuego: barro cocido a punto, de rojo parejo y canto firme. Suena metalico al golpe, que es la senal de que quedo bien cocido.',
+    usos: ['Muro de carga', 'Fachada aparente', 'Boveda y arco', 'Piso rustico'],
+  },
+  {
+    nombre: 'Ladrillo de barro artesanal',
+    imagen: barro,
+    alt: 'Pasillo entre dos muros de ladrillo de barro puestos a secar',
+    resumen:
+      'Moldeado a mano y secado al sol antes del horno. Textura viva y ligera variacion de tono entre piezas: cada muro queda distinto.',
+    usos: ['Muro tradicional', 'Obra rustica', 'Restauracion', 'Proyecto de autor'],
+  },
+  {
+    nombre: 'Artesania en barro',
+    imagen: artesania,
+    alt: 'Calaveras y calabazas de barro cocido recien salidas del horno',
+    resumen:
+      'Piezas decorativas del mismo barro y el mismo horno: calaveras, calabazas y trabajo de temporada. Tambien hacemos moldes a pedido.',
+    usos: ['Temporada', 'Decoracion', 'Regalo corporativo', 'Molde a medida'],
+  },
+];
+---
+
+<section class="section" id="productos">
+  <div class="wrap">
+    <header class="head">
+      <div>
+        <p class="eyebrow">01 — Productos</p>
+        <h2>Lo que sale del horno</h2>
+      </div>
+      <p class="lead">
+        Trabajamos por pedido y por volumen. Dinos que vas a construir y te decimos que pieza
+        te sirve, cuanto tiempo lleva y como te la entregamos.
+      </p>
+    </header>
+
+    <ul class="grid">
+      {
+        productos.map((p) => (
+          <li class="card">
+            <div class="card__media">
+              <Image
+                src={p.imagen}
+                alt={p.alt}
+                widths={[400, 600, 900]}
+                sizes="(min-width: 1100px) 32vw, (min-width: 700px) 46vw, 90vw"
+                loading="lazy"
+                quality={70}
+              />
+            </div>
+            <div class="card__body">
+              <h3>{p.nombre}</h3>
+              <p>{p.resumen}</p>
+              <ul class="usos">
+                {p.usos.map((u) => (
+                  <li>{u}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))
+      }
+
+      <li class="card card--cta">
+        <div class="card__body">
+          <h3>Tu pieza, tu medida</h3>
+          <p>
+            Si el proyecto pide un formato que no esta en la lista, lo moldeamos. Mandanos el
+            plano o una foto de la pieza y lo vemos.
+          </p>
+          <div class="btn-row">
+            <a
+              class="btn btn--gold"
+              href={whatsappUrl('Hola Muralla, necesito una pieza especial. Les comparto el detalle:')}
+            >
+              Platicar el proyecto
+            </a>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <p class="nota">
+      Medidas, resistencia y precio cambian segun el lote y el volumen del pedido.
+      <a href="#contacto">Pide la ficha tecnica</a> y te la mandamos el mismo dia.
+    </p>
+  </div>
+</section>
+
+<style>
+  .head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .head h2 {
+    font-size: var(--step-4);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition:
+      transform 0.35s var(--ease),
+      box-shadow 0.35s var(--ease),
+      border-color 0.35s var(--ease);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .card__media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--sand-200);
+  }
+
+  .card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease);
+  }
+
+  .card:hover .card__media :global(img) {
+    transform: scale(1.045);
+  }
+
+  .card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.85rem;
+    padding: clamp(1.35rem, 2.5vw, 1.9rem);
+  }
+
+  .card__body h3 {
+    font-size: var(--step-2);
+  }
+
+  .card__body p {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  .usos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: auto 0 0;
+    padding: 1.1rem 0 0;
+    border-top: 1px solid var(--border);
+    list-style: none;
+  }
+
+  .usos li {
+    padding: 0.3em 0.75em;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--sand-100);
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* La tarjeta de cierre repite el motivo de hilada en lugar de una foto. */
+  .card--cta {
+    justify-content: center;
+    background:
+      repeating-linear-gradient(
+          90deg,
+          rgba(251, 248, 243, 0.07) 0 1px,
+          transparent 1px 46px
+        )
+        0 0 / 46px 15px,
+      repeating-linear-gradient(0deg, rgba(251, 248, 243, 0.07) 0 1px, transparent 1px 15px),
+      var(--clay-900);
+    border-color: var(--clay-900);
+    color: var(--sand-100);
+  }
+
+  .card--cta h3 {
+    color: var(--sand-50);
+  }
+
+  .card--cta p {
+    color: rgba(245, 239, 229, 0.72);
+  }
+
+  .card--cta .btn-row {
+    margin-top: 0.75rem;
+  }
+
+  .card--cta:hover {
+    transform: translateY(-4px);
+  }
+
+  .nota {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    font-size: 0.9rem;
+    color: var(--ink-mute);
+  }
+
+  .nota a {
+    color: var(--gold-600);
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 860px) {
+    .head {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+  }
+</style>

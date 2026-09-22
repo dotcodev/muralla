@@ -1,0 +1,309 @@
+---
+import { Image } from 'astro:assets';
+import isotipo from '../assets/marca/muralla-isotipo.png';
+import tipografia from '../assets/marca/muralla-tipografia.png';
+import { nav, site, whatsappUrl } from '../data/site';
+
+interface Props {
+  /** Las paginas sin hero oscuro necesitan el header solido desde el inicio. */
+  solido?: boolean;
+}
+
+const { solido = false } = Astro.props;
+---
+
+<header class="site-header" data-header data-solid={solido ? '' : undefined}>
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label={`${site.nombreCompleto} — inicio`}>
+      <span class="brand__mark">
+        <Image src={isotipo} alt="" widths={[48, 96, 144]} sizes="48px" loading="eager" fetchpriority="high" />
+      </span>
+      <span class="brand__word">
+        <Image src={tipografia} alt="" widths={[130, 260, 390]} sizes="130px" loading="eager" />
+      </span>
+      <span class="visually-hidden">{site.nombreCompleto}</span>
+    </a>
+
+    <nav class="nav" id="nav-principal" aria-label="Navegacion principal">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="btn btn--gold nav-cta" href={whatsappUrl('Hola Muralla, quiero cotizar ladrillo.')}>
+        Cotizar
+      </a>
+    </nav>
+
+    <button
+      class="burger"
+      type="button"
+      aria-expanded="false"
+      aria-controls="nav-principal"
+      aria-label="Abrir menu"
+      data-burger
+    >
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    --header-fg: var(--sand-50);
+    --header-fg-soft: rgba(251, 248, 243, 0.78);
+
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    /* Arriba del todo va transparente para no cortar el hero. */
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition:
+      background-color 0.3s var(--ease),
+      border-color 0.3s var(--ease),
+      box-shadow 0.3s var(--ease);
+  }
+
+  /* El script marca el header en cuanto la pagina deja de estar arriba del todo. */
+  .site-header[data-scrolled],
+  .site-header[data-solid] {
+    --header-fg: var(--ink);
+    --header-fg-soft: var(--ink-soft);
+
+    background: color-mix(in srgb, var(--sand-50) 92%, transparent);
+    border-bottom-color: var(--border);
+    box-shadow: 0 1px 24px -12px rgba(35, 28, 22, 0.5);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .site-header[data-scrolled] {
+      backdrop-filter: saturate(160%) blur(12px);
+    }
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: var(--header-h);
+  }
+
+  /* Lockup horizontal: emblema + tipografia, medidos por alto para que la barra
+     conserve exactamente --header-h (el hero se sube esa misma cantidad). */
+  .brand {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.7rem;
+    line-height: 0;
+    transition: opacity 0.2s var(--ease);
+  }
+
+  .brand:hover {
+    opacity: 0.78;
+  }
+
+  .brand__mark :global(img) {
+    width: auto;
+    height: 2.4rem;
+  }
+
+  .brand__word :global(img) {
+    width: auto;
+    height: 1.3rem;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.2rem, 2.5vw, 2.4rem);
+  }
+
+  .nav ul {
+    display: flex;
+    gap: clamp(1.2rem, 2.5vw, 2.2rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav a:not(.btn) {
+    position: relative;
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: var(--header-fg-soft);
+    transition: color 0.2s var(--ease);
+  }
+
+  .nav a:not(.btn)::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 1px;
+    background: var(--gold-500);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.28s var(--ease);
+  }
+
+  .nav a:not(.btn):hover {
+    color: var(--header-fg);
+  }
+
+  .nav a:not(.btn):hover::after {
+    transform: scaleX(1);
+  }
+
+  .nav-cta {
+    padding: 0.65em 1.25em;
+  }
+
+  .burger {
+    display: none;
+    position: relative;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-right: -0.6rem;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .burger span {
+    position: absolute;
+    left: 50%;
+    width: 22px;
+    height: 1.5px;
+    margin-left: -11px;
+    background: var(--header-fg);
+    border-radius: 2px;
+    transition: transform 0.3s var(--ease);
+  }
+
+  .burger span:first-child {
+    top: 1.1rem;
+  }
+
+  .burger span:last-child {
+    bottom: 1.1rem;
+  }
+
+  .burger[aria-expanded='true'] span:first-child {
+    transform: translateY(5.5px) rotate(45deg);
+  }
+
+  .burger[aria-expanded='true'] span:last-child {
+    transform: translateY(-5.5px) rotate(-45deg);
+  }
+
+  @media (max-width: 860px) {
+    .burger {
+      display: block;
+    }
+
+    .nav {
+      position: fixed;
+      inset: var(--header-h) 0 auto;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 1rem var(--gutter) 2rem;
+      background: var(--sand-50);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      /* Cerrado por defecto; sin JS el menu simplemente no se despliega. */
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-0.75rem);
+      transition:
+        opacity 0.25s var(--ease),
+        transform 0.25s var(--ease),
+        visibility 0.25s;
+    }
+
+    .nav[data-open] {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .nav ul {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .nav li + li {
+      border-top: 1px solid var(--border);
+    }
+
+    .nav a:not(.btn) {
+      display: block;
+      padding: 0.95rem 0;
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      color: var(--ink);
+    }
+
+    /* El panel abierto necesita fondo solido aunque la pagina este arriba del todo. */
+    .site-header:has(.nav[data-open]) {
+      --header-fg: var(--ink);
+      background: var(--sand-50);
+      border-bottom-color: var(--border);
+    }
+
+    .nav a:not(.btn)::after {
+      display: none;
+    }
+
+    .nav-cta {
+      margin-top: 1.25rem;
+      padding: 0.9em 1.5em;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
+  const nav = document.querySelector<HTMLElement>('#nav-principal');
+
+  if (header) {
+    const onScroll = () => {
+      header.toggleAttribute('data-scrolled', window.scrollY > 8);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  if (burger && nav) {
+    const setOpen = (open: boolean) => {
+      nav.toggleAttribute('data-open', open);
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Cerrar menu' : 'Abrir menu');
+    };
+
+    burger.addEventListener('click', () => {
+      setOpen(burger.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Tocar un enlace navega y cierra: el menu no debe quedar tapando la seccion.
+    nav.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    });
+  }
+</script>

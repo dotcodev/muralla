@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Productos from '../components/Productos.astro';
+import Proceso from '../components/Proceso.astro';
+import Calidad from '../components/Calidad.astro';
+import Galeria from '../components/Galeria.astro';
+import Contacto from '../components/Contacto.astro';
+import Mapa from '../components/Mapa.astro';
+import { site } from '../data/site';
+---
+
+<Base
+  title={`Ladrillo de barro artesanal en Puebla | ${site.nombreCompleto}`}
+  description={site.descripcion}
+  path="/"
+  hero
+>
+  <Hero />
+  <Productos />
+  <Proceso />
+  <Calidad />
+  <Galeria />
+  <Contacto />
+  <Mapa />
+</Base>

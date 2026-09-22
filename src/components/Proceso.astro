@@ -1,0 +1,159 @@
+---
+import { Image } from 'astro:assets';
+import extraccion from '../assets/fotos/proceso-extraccion.jpg';
+import mezcla from '../assets/fotos/proceso-mezcla.jpg';
+import taller from '../assets/fotos/proceso-taller.jpg';
+import horno from '../assets/fotos/ladrillo-rojo-2.jpg';
+
+const pasos = [
+  {
+    n: '01',
+    titulo: 'Barro',
+    imagen: extraccion,
+    alt: 'Trabajador extrayendo barro del banco junto al taller',
+    texto:
+      'Sacamos el barro del banco y lo dejamos reposar. Se limpia de piedra y raiz: si el barro entra sucio, la pieza sale rajada.',
+  },
+  {
+    n: '02',
+    titulo: 'Amasado',
+    imagen: mezcla,
+    alt: 'Dos trabajadores amasando barro en la mezcladora del taller',
+    texto:
+      'Barro, agua y arena en la mezcladora hasta que la masa agarra punto. Es la parte que decide la resistencia de todo el lote.',
+  },
+  {
+    n: '03',
+    titulo: 'Moldeo y secado',
+    imagen: taller,
+    alt: 'Mesa de moldeo bajo la lona, con ladrillos acomodados alrededor',
+    texto:
+      'Se moldea pieza por pieza y se acomoda en hiladas abiertas. El aire pasa entre ladrillo y ladrillo hasta que sueltan toda el agua.',
+  },
+  {
+    n: '04',
+    titulo: 'Cocción',
+    imagen: horno,
+    alt: 'Ladrillo rojo ya cocido, listo para entrega',
+    texto:
+      'Al horno. Sale el rojo vivo, se revisa pieza por pieza y lo que no da el ancho no se carga al camion.',
+  },
+];
+---
+
+<section class="section section--dark" id="proceso">
+  <div class="wrap">
+    <header class="head">
+      <div>
+        <p class="eyebrow">02 — Proceso</p>
+        <h2>De la tierra al muro,<br />sin atajos</h2>
+      </div>
+      <p class="lead">
+        Un ladrillo bueno no es un truco: es barro limpio, amasado parejo, secado con paciencia
+        y fuego en su punto. Asi se hace en Muralla, y asi lleva haciendose siempre.
+      </p>
+    </header>
+
+    <ol class="pasos">
+      {
+        pasos.map((p) => (
+          <li class="paso">
+            <div class="paso__media">
+              <Image
+                src={p.imagen}
+                alt={p.alt}
+                widths={[320, 480, 720]}
+                sizes="(min-width: 1000px) 24vw, (min-width: 640px) 45vw, 88vw"
+                loading="lazy"
+                quality={68}
+              />
+              <span class="paso__n" aria-hidden="true">
+                {p.n}
+              </span>
+            </div>
+            <h3>{p.titulo}</h3>
+            <p>{p.texto}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    margin-bottom: clamp(2.75rem, 5vw, 4.5rem);
+  }
+
+  .head h2 {
+    font-size: var(--step-4);
+  }
+
+  .pasos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    gap: clamp(2rem, 3vw, 2.5rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: paso;
+  }
+
+  .paso__media {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    margin-bottom: 1.4rem;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--clay-800);
+  }
+
+  .paso__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Baja un punto la saturacion para que las 4 fotos lean como una serie. */
+    filter: saturate(0.92) contrast(1.04);
+    transition: transform 0.7s var(--ease);
+  }
+
+  .paso:hover .paso__media :global(img) {
+    transform: scale(1.05);
+  }
+
+  .paso__n {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 0.5rem 0.9rem 0.35rem;
+    background: var(--gold-500);
+    color: var(--clay-950);
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border-radius: 0 var(--radius) 0 0;
+  }
+
+  .paso h3 {
+    margin-bottom: 0.6rem;
+    font-size: var(--step-2);
+  }
+
+  .paso p {
+    font-size: 0.93rem;
+    line-height: 1.6;
+    color: rgba(245, 239, 229, 0.68);
+  }
+
+  @media (max-width: 860px) {
+    .head {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+  }
+</style>

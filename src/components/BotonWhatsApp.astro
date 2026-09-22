@@ -1,0 +1,121 @@
+---
+import IconoWhatsApp from './IconoWhatsApp.astro';
+import { site, whatsappUrl } from '../data/site';
+
+interface Props {
+  mensaje?: string;
+  /** "flotante" ancla el boton a la esquina; "linea" lo deja en el flujo. */
+  variante?: 'flotante' | 'linea';
+  texto?: string;
+}
+
+const {
+  mensaje = 'Hola Muralla, quiero cotizar ladrillo.',
+  variante = 'linea',
+  texto = 'Escribir por WhatsApp',
+} = Astro.props;
+
+const href = whatsappUrl(mensaje);
+const etiqueta = `Escribir a ${site.nombreCompleto} por WhatsApp`;
+---
+
+{
+  variante === 'flotante' ? (
+    <a class="wa wa--flotante" href={href} target="_blank" rel="noopener noreferrer" aria-label={etiqueta}>
+      <IconoWhatsApp size={28} />
+      <span class="wa__tip" aria-hidden="true">
+        Cotiza por WhatsApp
+      </span>
+    </a>
+  ) : (
+    <a class="wa wa--linea" href={href} target="_blank" rel="noopener noreferrer">
+      <IconoWhatsApp size={20} />
+      <span>{texto}</span>
+    </a>
+  )
+}
+
+<style>
+  /* Verde oficial de la marca WhatsApp. */
+  .wa {
+    --wa-verde: #25d366;
+    --wa-verde-oscuro: #1da851;
+
+    display: inline-flex;
+    align-items: center;
+    background: var(--wa-verde);
+    color: #fff;
+    text-decoration: none;
+    transition:
+      background-color 0.25s var(--ease),
+      transform 0.25s var(--ease),
+      box-shadow 0.25s var(--ease);
+  }
+
+  .wa:hover {
+    background: var(--wa-verde-oscuro);
+  }
+
+  /* --- En linea: mismo volumen que los demas botones del sitio --- */
+  .wa--linea {
+    gap: 0.6rem;
+    padding: 0.85em 1.6em;
+    border-radius: var(--radius);
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .wa--linea:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -14px rgba(37, 211, 102, 0.9);
+  }
+
+  /* --- Flotante: siempre a la mano, sin tapar el contenido --- */
+  .wa--flotante {
+    position: fixed;
+    right: clamp(1rem, 3vw, 2rem);
+    bottom: clamp(1rem, 3vw, 2rem);
+    z-index: 40;
+    gap: 0.7rem;
+    height: 3.5rem;
+    padding-inline: 1rem;
+    border-radius: 999px;
+    box-shadow: 0 10px 30px -8px rgba(18, 63, 33, 0.55);
+  }
+
+  .wa--flotante:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 36px -10px rgba(18, 63, 33, 0.6);
+  }
+
+  .wa__tip {
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0;
+    transition:
+      max-width 0.35s var(--ease),
+      opacity 0.25s var(--ease);
+  }
+
+  /* El texto solo se despliega si hay puntero: en tactil basta el icono. */
+  @media (hover: hover) and (min-width: 700px) {
+    .wa--flotante:hover .wa__tip,
+    .wa--flotante:focus-visible .wa__tip {
+      max-width: 12rem;
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .wa--flotante {
+      width: 3.5rem;
+      padding-inline: 0;
+      justify-content: center;
+    }
+  }
+</style>
