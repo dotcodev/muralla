@@ -174,5 +174,28 @@ Las otras imágenes de la carpeta `Brand` son bocetos de stock con marca de agua
 
 ## Publicar
 
-El resultado de `pnpm build` queda en `dist/` y es HTML estático. En Netlify, Vercel o
-Cloudflare Pages basta con apuntar el comando a `pnpm build` y el directorio a `dist`.
+El resultado de `pnpm build` queda en `dist/` y es HTML estático, así que sirve cualquier
+hosting de sitios estáticos. La configuración es la misma en los tres candidatos:
+
+| Ajuste | Valor |
+| --- | --- |
+| Build command | `pnpm build` |
+| Output / publish directory | `dist` |
+| Versión de Node | 22 (ya está en `.nvmrc`, los tres la respetan) |
+| Install command | se detecta solo por `pnpm-lock.yaml` |
+
+En **Cloudflare Pages** y **Netlify** se conecta el repo y se llenan esos campos. En
+**Vercel** el preset de Astro los pone solo.
+
+### Un paso que no hay que olvidar
+
+`site` en [`astro.config.mjs`](astro.config.mjs) apunta a `https://murallaladrillera.com`,
+que todavía no existe. De ahí salen el canonical, el sitemap y la URL de la imagen al
+compartir.
+
+Mientras el sitio viva en una URL temporal (`*.pages.dev`, `*.netlify.app`), esos tres
+apuntarán al dominio equivocado. No rompe nada visible, pero conviene:
+
+- si el dominio propio se conecta de inmediato, dejarlo como está;
+- si va a tardar, poner la URL temporal en `site` (y en `public/robots.txt`) y cambiarla el
+  día que se conecte el dominio.
