@@ -31,7 +31,16 @@ export const site = {
     cp: '73691',
     horario: 'Lunes a sabado, 8:00 a 18:00 h',
 
-    coordenadas: { lat: 19.7527665, lng: -97.6106141 },
+    // Coordenadas tomadas de la ficha del negocio en Google Maps, no de un punto
+    // suelto: el pin cae exactamente sobre el taller.
+    coordenadas: { lat: 19.7525019, lng: -97.6118393 },
+
+    // Identificador de la ficha en Google Maps. Es lo que permite enlazar al
+    // negocio (con foto, horario y telefono) en vez de a unas coordenadas sueltas.
+    googleMapsCid: '6556532899348934989',
+
+    // Codigo Plus: mas facil de dictar por telefono que las coordenadas.
+    codigoPlus: 'Q93Q+27 La Libertad, Puebla',
   },
 
   /**
@@ -60,8 +69,12 @@ const { lat, lng } = site.contacto.coordenadas;
 export const direccionCompleta =
   `${site.contacto.calle}, ${site.contacto.cp} ${site.contacto.ciudad}, ${site.contacto.estado}`;
 
-/** Ficha del taller en Google Maps, armada desde las coordenadas. */
-export const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat}%2C${lng}`;
+/** Ficha del negocio en Google Maps: abre el lugar con su foto, horario y telefono. */
+export const mapsUrl = `https://maps.google.com/?cid=${site.contacto.googleMapsCid}`;
+
+/** Abre Google Maps con la ruta ya trazada hasta el taller. */
+export const comoLlegarUrl =
+  `https://www.google.com/maps/dir/?api=1&destination=${lat}%2C${lng}`;
 
 export const whatsappUrl = (mensaje: string) =>
   `https://wa.me/${site.contacto.whatsapp}?text=${encodeURIComponent(mensaje)}`;

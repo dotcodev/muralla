@@ -70,6 +70,15 @@ nada hasta que el visitante se acerca.
 Se descartó OpenStreetMap: esa zona de La Libertad no está mapeada y el recuadro salía en
 blanco. Google sí tiene el trazado de las secciones y los comercios de referencia.
 
+Las coordenadas salen de la ficha del negocio en Google Maps, no de un punto suelto en el
+mapa: así «Cómo llegar» resuelve el destino como «Ladrillera "Muralla"» en vez de unas
+coordenadas anónimas. Los tres enlaces del sitio apuntan a cosas distintas a propósito:
+
+- **«Cómo llegar»** → `comoLlegarUrl`, abre Google Maps con la ruta ya trazada.
+- **La dirección del pie** → `mapsUrl`, abre la ficha del negocio (foto, horario, teléfono).
+- **El recuadro del mapa** → coordenadas. Buscar por nombre no funciona en el embed sin
+  llave de API: devuelve el recuadro en blanco.
+
 Si más adelante quieren evitar las cookies de Google, la alternativa es cambiar el iframe por
 un botón que lo cargue al hacer clic.
 
@@ -129,12 +138,14 @@ Lo que ya está resuelto:
 
 Lo que falta y no depende del código:
 
-1. **Google Business Profile.** Para una ladrillera es la palanca de SEO local más grande,
-   más que cualquier cosa del sitio. Al darlo de alta, usar exactamente el mismo nombre,
-   teléfono y dirección que están aquí: la coherencia entre las dos fichas es lo que Google
-   premia.
+1. **Reclamar la ficha de Google.** El negocio **ya existe** en Google Maps como
+   «Ladrillera "Muralla"», con el teléfono correcto y foto, pero está **sin reclamar** (la
+   ficha muestra «Reclamar este negocio») y **mal categorizado: aparece como "Estanco"**, que
+   es una tabaquería. Reclamarla y corregir la categoría es la acción de SEO local con más
+   impacto, por encima de cualquier ajuste del sitio. Al hacerlo, dejar el nombre, teléfono y
+   dirección idénticos a los de aquí: esa coherencia es lo que Google premia.
 2. **Dominio propio** y alta en Google Search Console.
-3. **Reseñas** en el perfil de Google.
+3. **Reseñas** en la ficha de Google.
 
 ## Estructura
 

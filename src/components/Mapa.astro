@@ -1,11 +1,14 @@
 ---
-import { direccionCompleta, mapsUrl, site } from '../data/site';
+import { comoLlegarUrl, direccionCompleta, site } from '../data/site';
 
 const { lat, lng } = site.contacto.coordenadas;
 
-// Embed sin llave de API. Se carga en diferido: al estar al final de la pagina,
-// no pesa nada hasta que el visitante se acerca a el.
-const embedSrc = `https://maps.google.com/maps?q=${lat},${lng}&z=15&hl=es&output=embed`;
+// Embed sin llave de API, por coordenadas. Buscar por nombre no funciona en esta
+// variante sin llave (devuelve el recuadro en blanco), asi que el pin va por
+// coordenadas y el rotulo del negocio lo pone la tarjeta de al lado.
+// Carga en diferido: al estar al final de la pagina, no pesa nada hasta que el
+// visitante se acerca a el.
+const embedSrc = `https://maps.google.com/maps?q=${lat},${lng}&z=16&hl=es&output=embed`;
 ---
 
 <section class="mapa" aria-labelledby="mapa-titulo">
@@ -30,13 +33,13 @@ const embedSrc = `https://maps.google.com/maps?q=${lat},${lng}&z=15&hl=es&output
 
       <p class="horario">{site.contacto.horario}</p>
 
-      <a class="btn btn--gold" href={mapsUrl} target="_blank" rel="noopener noreferrer">
+      <a class="btn btn--gold" href={comoLlegarUrl} target="_blank" rel="noopener noreferrer">
         Como llegar
       </a>
 
       <p class="coords">
-        <span class="visually-hidden">Coordenadas: </span>
-        {lat}, {lng}
+        <span class="visually-hidden">Codigo Plus de Google Maps: </span>
+        {site.contacto.codigoPlus}
       </p>
     </div>
   </div>
