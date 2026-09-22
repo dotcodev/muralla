@@ -1,6 +1,6 @@
-# pnpm 10+ no ejecuta scripts de instalacion salvo que se autoricen aqui.
-# esbuild (via Astro/Vite) enlaza su binario en un postinstall: sin esta linea
-# el build falla en CI con ERR_PNPM_IGNORED_BUILDS.
-# sharp no aparece porque usa binarios precompilados, no script de instalacion.
-onlyBuiltDependencies:
-  - esbuild
+# pnpm 10+ bloquea los scripts de instalacion de las dependencias salvo que se
+# autoricen aqui. esbuild (via Astro/Vite) tiene un postinstall: sin esta linea
+# el install falla en CI con ERR_PNPM_IGNORED_BUILDS.
+# En pnpm 11 la opcion se llama allowBuilds; onlyBuiltDependencies ya no surte efecto.
+allowBuilds:
+  esbuild: true
