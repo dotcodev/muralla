@@ -14,7 +14,16 @@
       ]
     },
     {
-      "source": "/(favicon.png|apple-touch-icon.png|og.jpg|media/(.*))",
+      "source": "/(favicon.png|apple-touch-icon.png|og.jpg)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
+      "source": "/media/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
