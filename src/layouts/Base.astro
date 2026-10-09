@@ -14,6 +14,8 @@ interface Props {
   noindex?: boolean;
   /** true cuando la pagina abre con el hero a sangre; el header va transparente. */
   hero?: boolean;
+  /** Incluye metadatos del video documental de la portada. */
+  video?: boolean;
 }
 
 const {
@@ -22,6 +24,7 @@ const {
   path = '/',
   noindex = false,
   hero = false,
+  video = false,
 } = Astro.props;
 
 const base = Astro.site ?? new URL(site.url);
@@ -31,14 +34,16 @@ const canonical = new URL(path, base).href;
 const ogImage = new URL('/og.jpg', base).href;
 
 // Datos estructurados: ayuda a que la ficha del negocio salga bien en Google.
+const businessId = new URL('/#negocio', base).href;
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
+  '@type': ['LocalBusiness', 'Store'],
+  '@id': businessId,
   name: site.nombreCompleto,
   description: site.descripcion,
   url: canonical,
   telephone: site.contacto.telefono,
-  email: site.contacto.email,
+  ...(site.contacto.email ? { email: site.contacto.email } : {}),
   image: ogImage,
   hasMap: mapsUrl,
   address: {
@@ -56,6 +61,12 @@ const jsonLd = {
   },
   sameAs: Object.values(site.redes).filter((url) => url.length > 0),
   openingHours: 'Mo-Sa 08:00-18:00',
+  priceRange: '$$',
+  currenciesAccepted: 'MXN',
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Puebla, México',
+  },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Productos',
@@ -70,6 +81,19 @@ const jsonLd = {
     })),
   },
 };
+
+const videoLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: 'Hecho para durar — Muralla Ladrillera',
+  description:
+    'Conoce el proceso artesanal con el que Muralla transforma barro, agua, sol y fuego en ladrillo hecho en La Libertad, Puebla.',
+  thumbnailUrl: new URL('/media/hecho-para-durar-poster.jpg', base).href,
+  uploadDate: '2026-10-01',
+  duration: 'PT25S',
+  contentUrl: new URL('/media/hecho-para-durar.mp4', base).href,
+  publisher: { '@id': businessId },
+};
 ---
 
 <!doctype html>
@@ -79,6 +103,7 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content="ladrillo artesanal Puebla, ladrillo rojo recocido, ladrillo de barro, ladrillera en Puebla, artesanía en barro" />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, follow" />}
 
@@ -93,16 +118,20 @@ const jsonLd = {
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="es_MX" />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={`Logotipo de ${site.nombreCompleto} sobre las hiladas de ladrillo del taller`} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
     <Font cssVariable="--font-display" preload />
     <Font cssVariable="--font-body" preload />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {video && <script type="application/ld+json" set:html={JSON.stringify(videoLd)} />}
   </head>
 
   <body>

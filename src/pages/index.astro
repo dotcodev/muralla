@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import Productos from '../components/Productos.astro';
 import Proceso from '../components/Proceso.astro';
+import Historia from '../components/Historia.astro';
 import Calidad from '../components/Calidad.astro';
 import Galeria from '../components/Galeria.astro';
 import Contacto from '../components/Contacto.astro';
@@ -15,10 +16,12 @@ import { site } from '../data/site';
   description={site.descripcion}
   path="/"
   hero
+  video
 >
   <Hero />
   <Productos />
   <Proceso />
+  <Historia />
   <Calidad />
   <Galeria />
   <Contacto />

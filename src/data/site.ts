@@ -22,14 +22,14 @@ export const site = {
     whatsappVisible: '233 106 5833',
     telefono: '+52 233 106 5833',
 
-    // TODO correo de ventas (depende del dominio definitivo).
-    email: 'ventas@murallaladrillera.com',
+    // Se deja vacío hasta confirmar un correo real; el formulario usa WhatsApp.
+    email: '',
 
     calle: 'Primera Seccion',
     ciudad: 'La Libertad',
     estado: 'Puebla',
     cp: '73691',
-    horario: 'Lunes a sabado, 8:00 a 18:00 h',
+    horario: 'Lunes a sábado, 8:00 a 18:00 h',
 
     // Coordenadas tomadas de la ficha del negocio en Google Maps, no de un punto
     // suelto: el pin cae exactamente sobre el taller.
@@ -86,7 +86,8 @@ export const nav = [
   { href: '/', label: 'Inicio' },
   { href: '/#productos', label: 'Productos' },
   { href: '/#proceso', label: 'Proceso' },
+  { href: '/#historia', label: 'Historia' },
   { href: '/#calidad', label: 'Calidad' },
-  { href: '/#galeria', label: 'Galeria' },
+  { href: '/#galeria', label: 'Galería' },
   { href: '/#contacto', label: 'Contacto' },
 ] as const;

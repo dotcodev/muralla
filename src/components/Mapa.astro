@@ -23,7 +23,7 @@ const embedSrc = `https://maps.google.com/maps?q=${lat},${lng}&z=16&hl=es&output
 
   <div class="wrap mapa__capa">
     <div class="tarjeta">
-      <p class="eyebrow">Donde estamos</p>
+      <p class="eyebrow">Dónde estamos</p>
       <h2 id="mapa-titulo">El taller</h2>
 
       <address>
@@ -34,17 +34,17 @@ const embedSrc = `https://maps.google.com/maps?q=${lat},${lng}&z=16&hl=es&output
       <p class="horario">{site.contacto.horario}</p>
 
       <a class="btn btn--gold" href={comoLlegarUrl} target="_blank" rel="noopener noreferrer">
-        Como llegar
+        Cómo llegar
       </a>
 
       <p class="coords">
-        <span class="visually-hidden">Codigo Plus de Google Maps: </span>
+        <span class="visually-hidden">Código Plus de Google Maps: </span>
         {site.contacto.codigoPlus}
       </p>
     </div>
   </div>
 
-  <p class="visually-hidden">Direccion del taller: {direccionCompleta}</p>
+  <p class="visually-hidden">Dirección del taller: {direccionCompleta}</p>
 </section>
 
 <style>

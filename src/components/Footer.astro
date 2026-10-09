@@ -29,7 +29,7 @@ const year = new Date().getFullYear();
         <p class="col-titulo">Contacto</p>
         <ul>
           <li><a href={telUrl}>{site.contacto.telefono}</a></li>
-          <li><a href={`mailto:${site.contacto.email}`}>{site.contacto.email}</a></li>
+          {site.contacto.email && <li><a href={`mailto:${site.contacto.email}`}>{site.contacto.email}</a></li>}
         </ul>
       </div>
 

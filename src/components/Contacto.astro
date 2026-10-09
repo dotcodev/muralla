@@ -11,8 +11,10 @@ const datos = [
     valor: site.contacto.whatsappVisible,
     href: whatsappUrl('Hola Muralla, quiero cotizar.'),
   },
-  { etiqueta: 'Telefono', valor: site.contacto.telefono, href: telUrl },
-  { etiqueta: 'Correo', valor: site.contacto.email, href: `mailto:${site.contacto.email}` },
+  { etiqueta: 'Teléfono', valor: site.contacto.telefono, href: telUrl },
+  ...(site.contacto.email
+    ? [{ etiqueta: 'Correo', valor: site.contacto.email, href: `mailto:${site.contacto.email}` }]
+    : []),
   { etiqueta: 'Taller', valor: direccionCompleta, href: mapsUrl },
   { etiqueta: 'Horario', valor: site.contacto.horario, href: '' },
 ];
@@ -21,11 +23,11 @@ const datos = [
 <section class="section section--dark" id="contacto">
   <div class="wrap grid">
     <div class="intro">
-      <p class="eyebrow">05 — Contacto</p>
+      <p class="eyebrow">06 — Contacto</p>
       <h2>Dinos que vas a construir</h2>
       <p class="lead">
-        Mandanos el metraje o la cantidad de piezas y te regresamos precio, tiempo de entrega y
-        ficha tecnica. Si lo tuyo corre, escribenos por WhatsApp: ahi contestamos mas rapido.
+        Mándanos el metraje o la cantidad de piezas y te regresamos precio, tiempo de entrega y
+        ficha técnica. Si lo tuyo corre, escríbenos por WhatsApp: ahí contestamos más rápido.
       </p>
 
       <div class="acciones">
@@ -58,7 +60,7 @@ const datos = [
 
       <div class="fila">
         <div class="campo">
-          <label for="telefono">Telefono o WhatsApp</label>
+          <label for="telefono">Teléfono o WhatsApp</label>
           <input id="telefono" name="telefono" type="tel" autocomplete="tel" required />
         </div>
         <div class="campo">
@@ -73,9 +75,9 @@ const datos = [
           <select id="producto" name="producto">
             <option>Ladrillo rojo recocido</option>
             <option>Ladrillo de barro artesanal</option>
-            <option>Artesania en barro</option>
+            <option>Artesanía en barro</option>
             <option>Pieza a medida</option>
-            <option>Todavia no lo se</option>
+            <option>Todavía no lo sé</option>
           </select>
         </div>
         <div class="campo">
@@ -85,7 +87,7 @@ const datos = [
       </div>
 
       <div class="campo">
-        <label for="mensaje">Cuentanos del proyecto</label>
+        <label for="mensaje">Cuéntanos del proyecto</label>
         <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
       </div>
 
@@ -101,7 +103,7 @@ const datos = [
         {
           tieneEndpoint
             ? 'Te respondemos el mismo dia habil.'
-            : 'Al enviar se abre tu app de correo con los datos listos.'
+            : 'Al enviar se abre WhatsApp con los datos listos.'
         }
       </p>
     </form>
@@ -291,7 +293,7 @@ const datos = [
   }
 </style>
 
-<script define:vars={{ tieneEndpoint, correo: site.contacto.email }}>
+<script define:vars={{ tieneEndpoint, whatsapp: site.contacto.whatsapp }}>
   const form = document.querySelector('[data-form]');
 
   if (form && !tieneEndpoint) {
@@ -303,7 +305,7 @@ const datos = [
 
       const cuerpo = [
         `Nombre: ${d.get('nombre')}`,
-        `Telefono: ${d.get('telefono')}`,
+        `Teléfono: ${d.get('telefono')}`,
         `Correo: ${d.get('email') || '-'}`,
         `Producto: ${d.get('producto')}`,
         `Cantidad: ${d.get('cantidad') || '-'}`,
@@ -311,10 +313,7 @@ const datos = [
         d.get('mensaje'),
       ].join('\n');
 
-      window.location.href =
-        `mailto:${correo}` +
-        `?subject=${encodeURIComponent('Solicitud de cotizacion — ' + d.get('nombre'))}` +
-        `&body=${encodeURIComponent(cuerpo)}`;
+      window.location.href = `https://wa.me/${whatsapp}?text=${encodeURIComponent('Solicitud de cotización\n\n' + cuerpo)}`;
     });
   }
 </script>
